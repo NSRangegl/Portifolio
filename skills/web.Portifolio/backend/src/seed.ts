@@ -10,7 +10,9 @@ async function seed() {
 
         const admin = await prisma.user.upsert({
             where: { username: process.env.ADMIN_USERNAME || 'admin' },
-            update: {},
+            update: {
+                password: adminPassword,
+            },
             create: {
                 username: process.env.ADMIN_USERNAME || 'admin',
                 password: adminPassword,
