@@ -15,12 +15,7 @@
         "moduleResolution": "node",
         "declaration": true,
         "declarationMap": true,
-        "sourceMap": true,
-        "types": [
-            "node",
-            "express",
-            "multer"
-        ]
+        "sourceMap": true
     },
     "include": [
         "src/**/*"
