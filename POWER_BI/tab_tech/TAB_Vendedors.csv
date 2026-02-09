@@ -1,0 +1,19 @@
+ID_vendedor,Nome_vendedor,ID_gerente,Nome_gerente
+1000,Carlos Almeida,1015,Mariana Costa
+1001,Bruno Santos,1015,Mariana Costa
+1002,Rafael Pereira,1015,Mariana Costa
+1003,Diego Rocha,1015,Mariana Costa
+1004,Lucas Martins,1015,Mariana Costa
+1005,Felipe Araujo,1016,Ricardo Nogueira
+1006,Thiago Lima,1016,Ricardo Nogueira
+1007,André Pacheco,1016,Ricardo Nogueira
+1008,Eduardo Farias,1016,Ricardo Nogueira
+1009,Renato Barros,1016,Ricardo Nogueira
+1010,Gustavo Teixeira,1017,Patricia Menezes
+1011,Henrique Lopes,1017,Patricia Menezes
+1012,Igor Batista,1017,Patricia Menezes
+1013,Marcelo Guedes,1017,Patricia Menezes
+1014,Victor Rangel,1017,Patricia Menezes
+1015,Mariana Costa,,
+1016,Ricardo Nogueira,,
+1017,Patricia Menezes,,

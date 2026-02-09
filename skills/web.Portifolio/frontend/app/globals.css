@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0A0A0A;
+  --foreground: #F5F5F5;
+  --card: #141414;
+  --card-foreground: #F5F5F5;
+  --primary: #CCFF00;
+  --primary-foreground: #0A0A0A;
+  --secondary: #262626;
+  --accent: #CCFF00;
+  --border: #1F1F1F;
+  --muted: #737373;
+  --muted-foreground: #A3A3A3;
+}
+
+/* Force dark mode behavior as the default for this minimalist design */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #0A0A0A;
+    --foreground: #F5F5F5;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-[#141414]/80 backdrop-blur-xl border border-white/5 shadow-2xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-400;
+  }
+
+  .accent-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#CCFF00] to-[#E5FF66];
+  }
+
+  .border-accent {
+    @apply border-[#CCFF00]/20 hover:border-[#CCFF00]/50 transition-colors;
+  }
+}
