@@ -103,9 +103,10 @@ export const uploadFiles = async (req: AuthRequest, res: Response): Promise<void
 export const getFile = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
+        const fileId = Array.isArray(id) ? id[0] : id;
 
         const file = await prisma.file.findUnique({
-            where: { id },
+            where: { id: fileId },
         });
 
         if (!file) {
@@ -113,22 +114,8 @@ export const getFile = async (req: AuthRequest, res: Response): Promise<void> =>
             return;
         }
 
-        const filePath = path.resolve(file.path);
-
-        // Check if file exists
-        try {
-            await fs.access(filePath);
-        } catch {
-            res.status(404).json({ error: 'File not found on disk' });
-            return;
-        }
-
-        // Set appropriate headers
-        res.setHeader('Content-Type', file.mimetype);
-        res.setHeader('Content-Disposition', `inline; filename="${file.filename}"`);
-
-        // Stream file
-        res.sendFile(filePath);
+        // Redirect to Supabase public URL
+        res.redirect(file.path);
     } catch (error) {
         console.error('Get file error:', error);
         res.status(500).json({ error: 'Failed to retrieve file' });
@@ -138,9 +125,10 @@ export const getFile = async (req: AuthRequest, res: Response): Promise<void> =>
 export const downloadFile = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
+        const fileId = Array.isArray(id) ? id[0] : id;
 
         const file = await prisma.file.findUnique({
-            where: { id },
+            where: { id: fileId },
         });
 
         if (!file) {
@@ -159,9 +147,10 @@ export const downloadFile = async (req: AuthRequest, res: Response): Promise<voi
 export const deleteFile = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
+        const fileId = Array.isArray(id) ? id[0] : id;
 
         const file = await prisma.file.findUnique({
-            where: { id },
+            where: { id: fileId },
         });
 
         if (!file) {
@@ -181,7 +170,7 @@ export const deleteFile = async (req: AuthRequest, res: Response): Promise<void>
 
         // Delete from database
         await prisma.file.delete({
-            where: { id },
+            where: { id: fileId },
         });
 
         res.status(204).send();
