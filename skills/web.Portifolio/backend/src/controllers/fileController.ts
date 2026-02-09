@@ -4,6 +4,7 @@ import fs from 'fs/promises';
 import prisma from '../config/database';
 import { AuthRequest } from '../middleware/auth';
 import { validateFile } from '../utils/fileValidation';
+import { storageService } from '../services/storageService';
 
 const UPLOAD_DIR = process.env.UPLOAD_DIR || './uploads';
 const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || '104857600');
@@ -54,20 +55,25 @@ export const uploadFiles = async (req: AuthRequest, res: Response): Promise<void
             return;
         }
 
-        // Save file metadata to database
+        // Upload all files to Supabase and save metadata to database
         const fileRecords = await Promise.all(
-            files.map(file =>
-                prisma.file.create({
+            files.map(async (file) => {
+                const publicUrl = await storageService.uploadFile(file);
+
+                // Clean up local temp file after upload
+                await fs.unlink(file.path).catch(() => { });
+
+                return prisma.file.create({
                     data: {
                         filename: file.originalname,
-                        storedName: file.filename,
+                        storedName: path.basename(publicUrl),
                         mimetype: file.mimetype,
                         size: file.size,
-                        path: path.relative(process.cwd(), file.path),
+                        path: publicUrl, // Storing the public URL as the path
                         projectId,
                     },
-                })
-            )
+                });
+            })
         );
 
         res.status(201).json({
@@ -142,21 +148,8 @@ export const downloadFile = async (req: AuthRequest, res: Response): Promise<voi
             return;
         }
 
-        const filePath = path.resolve(file.path);
-
-        // Check if file exists
-        try {
-            await fs.access(filePath);
-        } catch {
-            res.status(404).json({ error: 'File not found on disk' });
-            return;
-        }
-
-        // Force download
-        res.setHeader('Content-Type', file.mimetype);
-        res.setHeader('Content-Disposition', `attachment; filename="${file.filename}"`);
-
-        res.sendFile(filePath);
+        // Redirect to Supabase public URL for download
+        res.redirect(file.path);
     } catch (error) {
         console.error('Download file error:', error);
         res.status(500).json({ error: 'Failed to download file' });
@@ -176,12 +169,14 @@ export const deleteFile = async (req: AuthRequest, res: Response): Promise<void>
             return;
         }
 
-        // Delete from disk
-        const filePath = path.resolve(file.path);
+        // Delete from Supabase
         try {
-            await fs.unlink(filePath);
+            // Assuming we need to derive the storage path from the URL 
+            // or we could have stored it in storedName
+            const storagePath = `projects/${file.storedName}`;
+            await storageService.deleteFile(storagePath);
         } catch (error) {
-            console.error('Failed to delete file from disk:', error);
+            console.error('Failed to delete file from Supabase:', error);
         }
 
         // Delete from database
