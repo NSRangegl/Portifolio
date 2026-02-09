@@ -1,22 +1,17 @@
 services:
   - type: web
     name: portfolio-backend
-    env: node
+    runtime: node
+    plan: free
     rootDir: skills/web.Portifolio/backend
     buildCommand: npm install && npm run build
     startCommand: npm run start
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: DATABASE_URL
-        sync: false
       - key: JWT_SECRET
         generateValue: true
-      - key: PORT
-        value: 5000
       - key: SUPABASE_URL
-        sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
       - key: FRONTEND_URL
-        sync: false
+      - key: NODE_ENV
+        value: production
