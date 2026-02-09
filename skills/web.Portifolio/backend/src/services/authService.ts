@@ -5,12 +5,20 @@ import { generateAccessToken, generateRefreshToken } from '../utils/jwt';
 
 export class AuthService {
     static async validateUser(username: string, pass: string) {
+        console.log(`[Auth] Attempting login for: ${username}`);
         const user = await prisma.user.findUnique({ where: { username } });
-        if (!user) return null;
+        if (!user) {
+            console.log(`[Auth] User not found: ${username}`);
+            return null;
+        }
 
         const isValid = await bcrypt.compare(pass, user.password);
-        if (!isValid) return null;
+        if (!isValid) {
+            console.log(`[Auth] Password mismatch for: ${username}`);
+            return null;
+        }
 
+        console.log(`[Auth] Login successful for: ${username}`);
         return user;
     }
 
