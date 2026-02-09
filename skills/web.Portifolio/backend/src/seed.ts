@@ -7,6 +7,7 @@ async function seed() {
     try {
         // Create admin user
         const adminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'admin123', 10);
+        console.log('[Seed] Hashing password with 10 rounds...');
 
         const admin = await prisma.user.upsert({
             where: { username: process.env.ADMIN_USERNAME || 'admin' },
