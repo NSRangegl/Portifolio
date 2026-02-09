@@ -1,7 +1,7 @@
 services:
   - type: web
     name: portfolio-backend
-    runtime: node
+    env: node
     plan: free
     rootDir: skills/web.Portifolio/backend
     buildCommand: npm install && npm run build
