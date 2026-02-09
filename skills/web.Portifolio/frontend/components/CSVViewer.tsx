@@ -34,12 +34,12 @@ export default function CSVViewer({ fileUrl, filename }: CSVViewerProps) {
                         }
                         setLoading(false);
                     },
-                    error: (err) => {
+                    error: (err: any) => {
                         setError(err.message);
                         setLoading(false);
                     },
                 });
-            } catch (err) {
+            } catch (err: any) {
                 setError('Failed to load CSV file');
                 setLoading(false);
             }
