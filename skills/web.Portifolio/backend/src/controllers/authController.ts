@@ -16,16 +16,19 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 
         const user = await AuthService.validateUser(username, password);
         if (!user) {
+            console.log(`[Auth] Falha no login: Credenciais inválidas para o usuário ${username}`);
             res.status(401).json({ error: 'Credenciais inválidas' });
             return;
         }
 
         const session = await AuthService.createSession(user.id, user.username);
+        console.log(`[Auth] Login bem-sucedido: ${username}`);
         res.json({
             ...session,
             user: { id: user.id, username: user.username },
         });
     } catch (error) {
+        console.error(`[Auth] Erro interno durante o login:`, error);
         next(error);
     }
 };

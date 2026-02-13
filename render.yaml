@@ -1,11 +1,9 @@
 services:
   - type: web
     name: portfolio-backend
-    env: node
+    env: docker
     plan: free
     rootDir: skills/web.Portifolio/backend
-    buildCommand: npm install --include=dev && npx prisma migrate deploy && npm run seed && npm run build
-    startCommand: npm run start
     envVars:
       - key: DATABASE_URL
         sync: false
@@ -19,3 +17,7 @@ services:
         sync: false
       - key: NODE_ENV
         value: production
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
