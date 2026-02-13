@@ -3,7 +3,7 @@ import { uploadFiles, getFile, downloadFile, deleteFile } from '../controllers/f
 import { authMiddleware } from '../middleware/auth';
 import { upload } from '../middleware/upload';
 
-const router = Router();
+const router: Router = Router();
 
 // Upload files (protected)
 router.post('/upload', authMiddleware, upload.array('files', 10), uploadFiles);

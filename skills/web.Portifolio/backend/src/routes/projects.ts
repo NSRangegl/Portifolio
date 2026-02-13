@@ -8,7 +8,7 @@ import {
 } from '../controllers/projectController';
 import { authMiddleware } from '../middleware/auth';
 
-const router = Router();
+const router: Router = Router();
 
 // Public routes
 router.get('/', getProjects);
